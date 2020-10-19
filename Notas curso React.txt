@@ -1,0 +1,499 @@
+Notas del curso React de cero a experto de Fernando Herrera
+
+Sección 2 Introducción y conceptos generales:
+
+	¿Qué es react?
+		
+		React es una librería que permite desarrollar aplicaciones web
+
+		Ventajas de React:
+		Está hecho para trabajar con aplicaciones de cualquier tipo de magnitud
+		Es declarativa, lo cual hace que sea sencillo seguir patrones de diseño y crear interfaces de usuario interactivas
+		Es muy eficiente, cuando el DOM se tiene que actualizar, actualiza especificamente los cambios
+		Es predecible, es decir, fluye en una sola via
+		Utiliza componentes
+		Se pueden crear aplicaciones en servidor con node y aplicaciones móviles con react native
+		
+	Primeros pasos en react
+		
+		Se hizo la aplicación 01-intro-react, en la cual se demuestra cómo usar React y Babel para mostrar un elemento en pantalla
+
+Sección 3 Introducción a JavaScript moderno:
+
+	Inicio del proyecto
+	
+		Para crear un proyecto create-react-app nombre-app
+		Para iniciar el proyecto npm start
+		Lo primero que busca react en el proyecto es el index.js
+	
+	Variables y constantes
+		
+		Ya no se utiliza var, ahora se usan const y let
+		Las variables se puden volver a declarar si es que están en un scope ({}) diferente
+		
+	Template string
+	
+		Se usa el template string para simplificar concatenaciones
+		Los carácteres dentro de este tipo de declaración de string, incluyen espacios y saltos de linea
+	
+	Objetos literales
+	
+		Los objetos literales se clonan utilizando el comando spread {...objeto}, ya que si asignas el objeto a otra variable, solo estás creando una referencia al objeto
+		Cuando se asigna un objeto como propiedad de otro, no es necesario colocar el nombre de la propiedad si esta tendrá el mismo nombre que el objeto
+		Una forma de imprimir en consola que facilita la lectura de un objeto es console.table(objeto);
+		
+	Arreglos
+		
+		No es recomendable utilizar el método push porque este modifica el objeto principal
+		Se puede ocupar el comando spread para clonar un arreglo, realmente lo que hace este operador es retornar uno a uno los valores dentro del objeto u arreglo
+		La operación map de igual forma nos sirve para clonar, se le puede agregar lógica extra que se aplicará a cada uno de los valores del arreglo
+		
+	Funciones
+		
+		Por motivo de calidad de código y para evitar errores las funciones se asignan a una constante, de esta forma no se pueden crear variables con el mismo nombre
+		Existen dos tipos de funciones, las tradicionales y las funciones de flecha, estas últimas son más recientes y ofrecen una serie de ventajas
+		Cuando una función de flecha solo se utiliza para retornar un valor, se puede simplificar
+		
+		Ejemplos:
+
+			function sumar(num1, num2) { // Tradicional
+				return num1 + num2;
+			}
+		
+			const sumar = (num1, num2) => { // Flecha
+				return num1 + num2;
+			}
+
+			const sumar = (num1, num2) => num1 + num2; // Flecha simplificada
+
+		Cuando se retorna de esta forma un objeto, se debe colocar entre paréntesis ya que si no, js no diferencia las llaves del objeto con las llaves de la función
+		
+		Ejemplo:
+		
+			const getUsuarioActivo = (nombre) => ({uid:'ABC567', username:nombre});
+	
+	Desestructuración de objetos
+		
+		Es una forma de simplificar el tomar los atributos de ub objeto y colocarlos en variables
+		La sintaxis es la siguiente:
+		
+			const {nombre, edad, clave} = persona;
+		
+		Para cambiar el nombre de una variable:
+		
+			const {nombre, edad: años, clave} = persona;
+		
+		También se puede colocar directamente en los argumentos de una función, en el siguiente ejemplo se muestra lo antes mencionado, un valor por defecto y obtención de propiedades anidadas
+		
+			const useContext = ({ nombre, edad, clave = 'Avenger', latlng:{lat, lng} }) => {
+				return { nombre, edad, nombreClave: clave, lat, lng };
+			}
+	
+	Desestructuración de arreglos
+		
+		Es una forma de colocar los valores de un arreglo en variables
+		La sintaxis es la siguiente:
+		
+			const [nombre, setNombre] = useState('Daniel');
+		
+		Para saltar posiciones dentro del arreglo se ocupan comas, por ejemplo:
+		
+			const [ , setNombre] = useState('Daniel');
+			
+	Import/ export y funciones comunes de arreglos
+		
+		La sintaxis para importar elementos de otro archivo js es:
+		
+			import { heroes } from './data/heroes'
+		
+		Para poder importar un elemento, este tiene que tener la palabra reservada export antes de su declaración
+		
+		Función find
+		
+			const getHeroeById = (id) => heroes.find(heroe => heroe.id === id);
+		
+		Función filter
+		
+			const getHeroeByOwner = (owner) => heroes.filter(heroe => heroe.owner === owner);
+			
+	Multiples exportaciones y exportaciones por defecto
+	
+		Existen dos formas de hacer exportaciones por defecto:
+			La primera es la normal, solamente colocando las palabras export default en la declaración de lo que queremos exportar
+			La segunda es exportando por defecto despues de la declaración
+			
+				export default CounterApp;
+		
+		Las exportaciones por defecto se pueden combinar con exportaciones normales
+		
+		Cuando se hace una importación de una exportación por defecto se importa de la siguiente manera
+		
+			import heroes from './data/heroes'
+		
+		Cuando se hace una exportación combinada se usa la siguiente forma
+		
+			import heroes, {owners} from './data/heroes'
+			
+	Promesas
+		
+		Las promesas son un bloque de código siempre asincrono que retorna un resolve o un reject, es decir, un se pudo o no se pudo
+		Una promesa se ve de la siguiente forma:
+		
+			new Promise(
+				(resolve, reject) => {
+					setTimeout(() => {
+						const hero = getHeroeById(id);
+						if (hero != null) {
+							resolve(hero);
+						} else {
+							reject('No se encontró al heroe');
+						}
+					}, 2000);
+				}
+			);
+		
+		Podemos mandar por medio de los métodos resolve y reject los argumentos que nosotros queramos y ocuparlos al momento de consumir la promesa
+		Normalmente vamos a ocupar las promesas dentro de una función, es decir, vamos a retornarla
+		
+			const getHeroByIdAsync = (id) => {
+				return // El código de arriba
+			};
+		
+		Al momento de consumir una promesa, tenemos los siguientes métodos: then, catch y finally
+		
+			El método then es el que se ejecuta cuando la promesa se resolvió satisfactoriamente, es decir, al haberse ejecutado el resolve
+			El método catch es el que se ejecuta cuando la promesa no se resolvió satisfactoriamente, es decir, al haberse ejecutado el reject
+			El método finally se ejecuta al final, sin importar si la promesa fue satisfactoria o no
+		
+		Al recibir estos métodos una función como argumento, en caso de que redirigieramos en ese punto a una función, podemos colocarla directamete
+		Así se ve el consumo de la promesa mostrada anterioremente:
+		
+			getHeroByIdAsync(1)
+			.then((hero) => {
+					console.log(hero)
+				})
+			.catch((ex) => {
+					console.log(ex)
+				}
+			);
+			
+			ó
+			
+			getHeroByIdAsync(1).then(console.log).catch(console.log);
+			
+	Fetch
+		
+		Es una función ya implementada en los navegadores, que permite consumir endpoints directamente
+		En el ejercicio se puede ver de forma detallada cómo se consume un endpoint
+		A grandes razgos se implementaron los conocimientos ya adquiridos para consumir la API de Giphy, desestructurizarla y mostrar un gif aleatorio en pantalla
+		Lo más interesante del ejercicio fue que se utilizaron promesas anidadas, es decir, promesas que retornan promesas, aquí el código:
+		
+			const randomGifURL = 'http://api.giphy.com/v1/gifs/random';
+			const apiKey = 'Hcv9HM1H4XhSl3SDApBg4rhPHdkiBc7P';
+
+			const showRandomGif = () => {
+				const url = `${randomGifURL}?api_key=${apiKey}`;
+
+				fetch(url)
+					.then(resp => resp.json())
+					.then(({ data }) => {
+						const { url: imgUrl } = data.images.original
+
+						const img = document.createElement('img');
+						img.src = imgUrl;
+						document.body.append(img);
+					})
+					.catch(err => console.log(err));
+			};
+
+			showRandomGif();
+		
+		Notas rápidas:
+			Fetch url es una promesa que nos devuelve el valor retornado por la url, ya sea html, un json, lo que sea
+			El método json() convierte texto en json, de igual manera es una promesa y lo interesante es que nos trae accede al body de la respuesta del fetch
+			Como extra se ve como crear un elemento al html mediante js
+			
+	Async y await
+		
+		Estas dos instrucciones al igual que las promesas, corren de forma asincrona, la diferencia radica en la legibilidad del código, es mucho más sencillo de entender y por lo tanto de mantener.
+		Al nosotros colocar antes de una función la palabra async, la función automáticamente retorna una promesa, y esta a su vez retorna como respuesta de la misma lo que retorna la función
+		Al nosotros utilizar una función async nuestro código no se va a esperar, se va a seguir mientras esta se ejecuta
+		La palabra await nos sirve para esperar la respuesta de promesas, es decir, si nosotros colocamos un await, el código no va a avanzar hasta que la promesa finalice, similar a lo que pasa con la función then de una promesa
+		
+	Operador condicional ternario
+		
+		El operador ternario es una forma simple de condicionar un valor, su estructura es
+		
+			mensaje = activo ? 'Activo' : 'Inactivo';
+			
+		Aunque también tiene una simplificación por si no se quiere utilizar el else
+		
+			mensaje = activo && 'Activo';
+			
+Sección 4: Primeros pasos con React
+	
+	¿Qué son los componentes?
+		
+		Un componente es una pequeña pieza de código encapsulada y reutilizable que puede tener estado o no
+		
+	Estructura de directorios
+		
+		En la carpeta public nos vamos a encontrar los siguientes archivos:
+		
+			favicon.io: Es el icono que se muestra en la pestaña del navegador
+			index.html: Es una plantilla para modificar metadatos y configuraciones del sitio web o PWA en caso de ser una aplicación móvil, sobre este HTML correrá la aplicación
+			manifest.json: Es un archivo de configuración para una PWA
+			robots.txt: Es un archivo que sirve para los robots de google
+			
+		En la raíz del proyecto encontramos los siguientes archivos:
+		
+			.gitignore: Es un archivo que utiliza git para ignorar carpetas o archivos
+			package.json: Es un archivo que utiliza node para saber qué módulos están instalados y en qué versiones
+			readme.md: Es un archivo que se utiliza para presentar el proyecto en caso de que se utilice un repositorio
+			
+		En la carpeta src viene la aplicación, es ahí en donde desarrollaremos la app}
+		
+	Hola mundo en React
+	
+		Para poder asignar etiquetas HTML a variables (JSX) es necesaria la importación de react
+			
+			import React from 'react';
+			
+		Para poder renderizar los elementos, es necesaria la importación de ReactDOM, el cuál estará encargado de las vistas de la app
+		
+			import ReactDOM from 'react-dom'
+			
+		Para renderizar un elemento, utilizamos el método render de ReactDOM, en el cual el primer argumento es el elemento y el segundo es el contenedor
+		
+			ReactDOM.render(saludo, divRoot);
+			
+	Nuestro primer componente
+		
+		Creando un componente manualmente
+			
+			Los archivos de componentes tienen que tener un nombre en UpperCamelCase, ejemplo PrimeraApp.js
+			Lo preferible es que los componentes sean functional components
+			Normalmente lo que haremos será retornar por defecto el componente funcional y este a su vez retorna HTML
+			Para renderizar un componente se hace de la siguiente forma:
+			
+				ReactDOM.render(<PrimeraApp />, divRoot);
+			
+			Para importar un archivo css se hace de la siguiente forma:
+			
+				import './index.css';
+		
+	Retornar elementos en el Componente - Fragment
+		
+		No es posible retornar varios elementos en un componente (o sea, una función js), por lo tanto, es necesario agrupar todos los elementos en una sola etiqueta, antes se solía ocupar un div o un <Fragment></Fragment> pero tiene sus inconvenientes, ya que tenemos que hacer una importación
+		La mejor forma de hacerlo es retornando todo en una etiqueta vacía:
+		
+			<><h1>Hola mundo</h1><p>Mi primera aplicación</p></>;
+		
+		De esta forma, podemos tener el mismo resultado que al usar <Fragment></Fragment> pero sin hacer una importación
+		
+	Impresión de variables en el HTML
+		
+		Para imprimir variables en un componente ocupamos la siguiente forma
+		
+			const saludo = 'Hola mundo';
+
+			return <><h1>{ saludo }</h1><p>Mi primera aplicación</p></>;
+			
+		De esta forma se pueden imprimir la mayor parte de tipos de variables primitivas, excepto booleanos y objetos
+			
+			Para imprimir booleanos solo se tienen que convertir a string
+			Para imprimir objetos se ocupa la siguiente forma
+				
+				const saludo = {nombre:'Daniel', edad:'21'};
+				
+				<pre>{ JSON.stringify(saludo, null, 3) }</pre>
+				
+	Comunicación entre componentes - props
+	
+		Todos los componentnes reciben un objeto prop del padre, así este no mande nunguna propiedad, lo que pasaría es que lo recibiría vacío
+		Las props son propiedades que nosotros establecemos al momento de renderizar un componente hijo, se ve de la siguiente forma
+		
+			<componente nombre="Daniel" />
+			
+		Para nosotros recibir el prop en un componente, basta con poner prop como argumento para la función, es decir
+			
+			const PrimeraApp = ( prop ) => {
+		
+		Pero para que se puedan ocupar las propiedades de una forma más sencilla se hace uso de la desestructuración
+		
+			const PrimeraApp = ( {nombre} ) => {
+			
+		Esto ultimo permite que el código sea más legible y que en vez de utilizar prop.nombre ocupemos solamente la constante nombre
+		
+		En algunos casos tendremos que utilizar valores por defecto, los cuales se ponenen de la siguiente forma
+		
+			const PrimeraApp = ( {nombre = 'Mundo'} ) => {
+			
+		Al colocar nosotros ese valor por defecto, se darían los siguientes resultados
+		
+			<componente nombre="Daniel" /> -> nombre:Daniel
+			
+			ó
+			
+			<componente /> -> nombre:Mundo
+			
+	PropTypes
+		
+		PropTypes es una clase de React que nos permite definir que tipo de valor estamos esperando en los props, así como establecer propiedades requeridas
+		Se tiene que instanciar fuera del componente funcional y va de la siguiente forma:
+		
+			PrimeraApp.propTypes = {
+				nombre: PropTypes.string.isRequired
+			}
+		
+		En el ejemplo anterior definimos que la propiedad nombre tiene que ser de tipo string y que es requerida
+		
+	DefaultProps
+	
+		DefaultProps es una forma de colocar valores por defecto a las propiedades del componente, su función es la misma que la que ocupamos en la destructuación del objeto prop
+		Se usa de la siguiente manera, y de igual forma se coloca debajo de la declaración del componente funcional
+		
+			PrimeraApp.defaultProps = {
+				nombre: 'Mundo'
+			}
+		
+	Eventos
+		
+		Los eventos se declaran en las etiquetas html de la siguiente forma
+			
+			const handleAdd = () => {
+				console.log('Add');
+			}
+			
+			return <><h1>CounterApp</h1>
+					<h2>{value}</h2>
+					<button onClick={handleAdd}>+1</button>
+					</>
+		
+		Como tal lo que tiene que recibir el evento es una función, ya sea que la coloquemos directamente o que la declaremos previamente en el componente
+		Podemos usar lógica dentro del componente para colocar un evento u otro pero hay que tener cuidado cuando hagamos referencia a un evento, ya que cuando se hace referencia a la variable que contiene la función, no se ocupan parentesis, si los llegamos a ocupar lo que estaríamos haciendo es ejecutar la función y el valor retornado quedaría en su lugar
+		
+		En este sitio podemos ver listados todos los eventos de react
+		
+			https://es.reactjs.org/docs/events.html
+			
+	useState - Hook
+	
+		Los Hooks son solo una función
+		En el caso de useState, se trata de una función que devuelve un arreglo que contiene en su primera posición un valor y en la segunda una función para cambiar dicho valor.
+		La nomenclatura para estos valores es la siguiente [valor, setValor]
+		Por ejemplo:
+		
+			const [counter, setCounter] = useState(value);
+			
+			const handleAdd = () => {
+				setCounter(counter + 1);
+				// setCounter((c) => c + 1);
+			}
+			
+		En el ejemplo anterior se le insertó un valor inicial al hook useState, el cual retornó ese mismo valor junto con una función para actualizarlo, a partir de este punto tenemos que actualizar el valor utilizando dicha función, esto debido a la permanencia del valor guardado y que cada que se actualice mediante esa función, los cambios se renderizán en el sitio. En el mismo ejemplo podemos ver que hay un comentario con una función de flecha, se trata de otra forma de hacer el cambio si es que no se tiene acceso al valor del estado actual (variable de la primera posición del arreglo retornado por el useState())
+		
+	Introducción a las pruebas unitarias y de integración
+		
+		Pruebas unitarias: Enfocadas a pequeñas funcionalidades
+		Pruebas de integración: Cómo funcionan varias piezas en conjunto
+		Características de las pruebas en programación:
+		
+			Fáciles de escribir
+			Fáciles de leer
+			Confiables
+			Rápidas
+			Principalmente unitarias
+		
+		Es mejor hacer pruebas de integración una vez se hicieron pruebas unitarias
+		Los pasos AAA para realizar las pruebas son:
+		
+			Arrange (Arreglar): El paso en el que se establece el estado inicial (variables, importaciones, etc), es decir, se prepara el ambiente a probar
+			Act (actuar): Se realizan las acciones sobre el paso anterior, en otras palabras se ejecuta la prueba
+			Assert (afirmar): Se observan los resultados de la prueba y se define si son los resultados esperados o no
+			
+		No hay que probar cosas sin sentido
+		No hay que probar todo
+		Probar una ruta critica es prioridad
+	
+	Mi primera prueba
+	
+		Creamos una prueba sencilla, para empezar los archivos ocupados para pruebas tienen la siguiente nomenclatura:
+		
+			nombre.test.ts
+			
+		El nombre del archivo debe ser el mismo que el del archivo que desea probar (en caso de tratarse de pruebas unitarias)
+		Dentro de ese archivo vamos a colocar una prueba, que no es más que una llamda a una función que recibe dos parámetros: un mensaje de lo que se espera y un callback
+		
+			test('should be active', () => {
+				const isActive = false;
+
+				if(!isActive){
+					throw new Error('Inactivo');
+				}
+			})
+		
+		Para ejecutar nuestras pruebas ocupamos el comando
+		
+			npm run test
+			
+		Además podemos acudir a otras opciones en este comando para filtrar pruebas y demás
+		
+	Jest - Expect - toBe
+	
+		Jest es un framework que se utiliza para realizar pruebas, este framweork es el que comunmente se usa con react
+		
+			https://jestjs.io
+			
+		Además de permitirnos hacer pruebas, nos proporciona una gran cantidad de funciones que nos simplifican la tarea, como es el caso de expect
+		Es importante que las pruebas sean muy fáciles de leer y que sean simples, por eso mismo se recomienfa el uso de estas funciones
+		Expect to be funciona de la siguiente manera
+		
+			test('should be equals', () => {
+    
+				// 1.- inicialización
+				const mensaje = 'Hola mundo';
+
+				// 2.- estímulo
+				const mensaje2 = `Hola mundo!`;
+
+				// 3.- observar el comportamiento
+				expect(mensaje).toBe(mensaje2);
+			})
+		
+		Una buena práctica es ocupar un agrupamiento de pruebas por Describe, de esta forma es más legible y ordenado
+		
+			describe('Pruebas en el archivo demo.test.js', () => {
+				test('should be equals', () => {
+
+					// 1.- inicialización
+					const mensaje = 'Hola mundo';
+
+					// 2.- estímulo
+					const mensaje2 = `Hola mundo!`;
+
+					// 3.- observar el comportamiento
+					expect(mensaje).toBe(mensaje2);
+				})
+			})
+		
+	Pruebas en el archivo
+	
+		A cada uno de los archivos de prueba se les llama test suite
+		Los archivos de prueba deben tener la misma estructura de carpetas que los archivos que ocupamos en el desarrollo
+		Para tener la ayuda de escritura para Jest, debemos importar lo siguiente:
+		
+			import '@testing-library/jest-dom';
+		
+		Realizamos el archivo correspondiente al archivo que vamos a probar, lo importamos y hacemos nuestras pruebas
+		
+	To Equal
+	
+		Para comparar objetos se utiliza el toEqual, de la siguiente forma:
+		
+			expect(user).toEqual(userTest);
+			
+		Este método compara que ambos objetos tengan las mismas propiedades y los mismos valores			
+		Ya que el toBe es un === y no funciona con objetos ya que compara el espacio de memoria en el que se encuentran
+		
+	

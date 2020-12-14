@@ -74,7 +74,7 @@ Sección 3 Introducción a JavaScript moderno:
 	
 	Desestructuración de objetos
 		
-		Es una forma de simplificar el tomar los atributos de ub objeto y colocarlos en variables
+		Es una forma de simplificar el tomar los atributos de un objeto y colocarlos en variables
 		La sintaxis es la siguiente:
 		
 			const {nombre, edad, clave} = persona;
@@ -152,7 +152,7 @@ Sección 3 Introducción a JavaScript moderno:
 				}
 			);
 		
-		Podemos mandar por medio de los métodos resolve y reject los argumentos que nosotros queramos y ocuparlos al momento de consumir la promesa
+		Podemos mandar por medio de los métodos resolve y reject los argumentos que nosotros queramos y ocupar al momento de consumir la promesa
 		Normalmente vamos a ocupar las promesas dentro de una función, es decir, vamos a retornarla
 		
 			const getHeroByIdAsync = (id) => {
@@ -251,7 +251,7 @@ Sección 4: Primeros pasos con React
 			package.json: Es un archivo que utiliza node para saber qué módulos están instalados y en qué versiones
 			readme.md: Es un archivo que se utiliza para presentar el proyecto en caso de que se utilice un repositorio
 			
-		En la carpeta src viene la aplicación, es ahí en donde desarrollaremos la app}
+		En la carpeta src viene la aplicación, es ahí en donde desarrollaremos la app
 		
 	Hola mundo en React
 	
@@ -446,7 +446,8 @@ Sección 4: Primeros pasos con React
 			https://jestjs.io
 			
 		Además de permitirnos hacer pruebas, nos proporciona una gran cantidad de funciones que nos simplifican la tarea, como es el caso de expect
-		Es importante que las pruebas sean muy fáciles de leer y que sean simples, por eso mismo se recomienfa el uso de estas funciones
+		Es importante que las pruebas sean muy fáciles de leer y que sean simples, por eso mismo se recomienda el uso de estas funciones:
+		
 		Expect to be funciona de la siguiente manera
 		
 			test('should be equals', () => {

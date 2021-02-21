@@ -236,6 +236,12 @@ Sección 4: Primeros pasos con React
 		
 		Un componente es una pequeña pieza de código encapsulada y reutilizable que puede tener estado o no
 		
+	Comandos para crear un nuevo proyecto
+		
+		npx create-react-app nombre-app
+		cd nombre-app
+		npm start
+		
 	Estructura de directorios
 		
 		En la carpeta public nos vamos a encontrar los siguientes archivos:
@@ -423,7 +429,7 @@ Sección 4: Primeros pasos con React
 			nombre.test.ts
 			
 		El nombre del archivo debe ser el mismo que el del archivo que desea probar (en caso de tratarse de pruebas unitarias)
-		Dentro de ese archivo vamos a colocar una prueba, que no es más que una llamda a una función que recibe dos parámetros: un mensaje de lo que se espera y un callback
+		Dentro de ese archivo vamos a colocar una prueba, que no es más que una llamada a una función que recibe dos parámetros: un mensaje de lo que se espera y un callback
 		
 			test('should be active', () => {
 				const isActive = false;
@@ -496,5 +502,11 @@ Sección 4: Primeros pasos con React
 			
 		Este método compara que ambos objetos tengan las mismas propiedades y los mismos valores			
 		Ya que el toBe es un === y no funciona con objetos ya que compara el espacio de memoria en el que se encuentran
+		
+	To be para comparar tipos de variables
+		
+		Para comparar tipos de variables se hace de la siguiente forma:
+		
+			expect(typeof text).toBe('string');
 		
 	

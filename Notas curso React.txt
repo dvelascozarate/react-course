@@ -509,4 +509,58 @@ Sección 4: Primeros pasos con React
 		
 			expect(typeof text).toBe('string');
 		
+	Done
 	
+		Se utiliza opcionalmente el callback done para indicarle a Jest que hemos terminado de ejecutar la prueba, esto es util cuando estamos probando funciones asincronas, ya que por defecto las pruebas terminan cuando el hilo principal termina de ejecutarse. Ejemplo:
+		
+		    test('debe retornar un heroe de forma asincrona ', (done) => {
+				const id = 1;
+
+				getHeroeByIdAsync(id).then(
+					heroe => {
+						expect(heroe).toBe(heroes[0]);
+						done();
+					}
+				)
+			});
+			
+	Usar await dentro de la prueba
+	
+		Para usar esta palabra reservada solamente hay que cambiar el callback del método test a async. Ejemplo:
+		
+		    test('Debe retornar una url de un gif', async () => {
+
+				const url = await getImagen();
+
+				expect(url.includes('https://')).toBe(true);
+
+			});
+	
+	Pruebas en componentes de react
+	
+		Podemos probar los resultados renderizados de los componentes que hemos hecho, esto utilizando el método render del modulo @testing-library/react
+		
+		Nota: esta es la unica vez que se utilizaran metodos propios de react para testeo, ya que Enzyme será la librería que utilizaremos el resto del curso
+		
+		Queda de la siguiente forma:
+		
+			import React from 'react';
+			import { render } from "@testing-library/react"
+			import PrimeraApp from '../PrimeraApp'
+
+			describe('Pruebas en el componente PrimeraApp', () => {
+				test('Debe renderizar correctament el mensaje', () => {
+
+					const nombre = 'Daniel'
+					const { getByText } = render(<PrimeraApp nombre={nombre} />);
+
+					expect(getByText(`Hola ${nombre}`)).toBeInTheDocument();
+				})
+
+			})
+			
+		Notese que se tiene que importar react para poder usar jsx y el componente que queremos probar
+		
+		El método toBeInTheDocument se encuentra en una extensión de jest, la cual se alcanza importando este modulo @testing-library/jest-dom/extend-expect
+		
+		El archivo setupTests.js sirve para las importaciones por defecto de todas las pruebas

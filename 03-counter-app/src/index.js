@@ -6,5 +6,5 @@ import './index.css';
 
 const divRoot = document.querySelector('#root');
 
-ReactDOM.render(<><PrimeraApp nombre={'Daniel'} />
-<CounterApp value={1998} /></>, divRoot);
+ReactDOM.render(<><PrimeraApp nombre={'Daniel'} subtitulo={'Mi primera aplicación'} />
+    <CounterApp value={1998} /></>, divRoot);

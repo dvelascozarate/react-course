@@ -564,3 +564,100 @@ Sección 4: Primeros pasos con React
 		El método toBeInTheDocument se encuentra en una extensión de jest, la cual se alcanza importando este modulo @testing-library/jest-dom/extend-expect
 		
 		El archivo setupTests.js sirve para las importaciones por defecto de todas las pruebas
+		
+	Enzyme
+		
+		Enzyme es una librería que hace más sencillas las pruebas a los componentes de React
+		https://enzymejs.github.io/enzyme/
+		Para su instalación basta con seguir la documentación
+		
+		Para tener la ayuda de predicción de texto al escribir el código, tenemos que hacer esta importación en nuestro archivo de la prueba
+			import "@testing-library/jest-dom"
+		
+		También debemos importar Enzyme para poder trabajar con él
+			import { shallow } from 'enzyme';
+			
+		El código de la prueba anterior fue actualizado para usar Enzime		
+			describe('Pruebas en el componente PrimeraApp', () => {
+				test('Debe de mostrar el componente correctamente', () => {
+
+					const nombre = 'Daniel';
+					const wrapper = shallow(<PrimeraApp nombre={nombre} />);
+
+					expect(wrapper).toMatchSnapshot();
+				})
+			})
+		
+		Como podemos ver, el resultado de la prueba es la comparación entre dos snapshots. Los snapshots son capturas del código HTML resultado de la renderización del componente, al final lo que se hace es comparar el resultado con un resultado anterior.
+		
+		El método shallow es similar al método render, solo que shallow proporciona más opciones
+		
+		Para poder comparar snapshots con jest, es necesario instalar esta otra librería
+			https://www.npmjs.com/package/enzyme-to-json
+			
+	Revisar elementos HTML dentro del componente
+	
+		El objeto ShallowWraper (devuelto por el método shallow de Enzyme) nos proprciona muchos métodos muy utiles para acceder a caracteristicas del componente, uno de ellos es el método find
+		
+		Este método permite realizar busquedas exactamente igual a como lo haríamos con el método quesySelector nativo de JSON
+		
+		A su vez podemos acceder a las caracteristicas del html obtenido, para después aplicar lo que ya vimos en temas pasados para realizar pruebas
+		
+		    test('Debe mostrar correctamente el subtitulo', () => {
+				const nombre = 'Daniel';
+				const subtitulo = 'Soy un subtitulo';
+				const wrapper = shallow(<PrimeraApp nombre={nombre} subtitulo={subtitulo} />);
+
+				const texto = wrapper.find('p').text();
+
+				expect(texto).toBe(subtitulo);
+
+			})
+			
+	Simular eventos
+	
+		Para simular eventos, utilizamos un método dentro del objeto html, tomado del wrapper, medianto el metodo simulate podemos elegir que evento simular, este método tiene dos parámetros, uno que indica el tipo de evento y otro que indica los argumentos en caso de ser necesarios
+		
+		    test('Comprueba que el boton +1 fuciona correctamente', () => {
+				wrapper.find('button').at(0).simulate('click');
+				const defaultValueText = wrapper.find('h2').text();
+				expect(defaultValueText).toBe('101');
+			})
+		
+	Reutilizar variables e inicializar ambiente antes de cada prueba
+	
+		Las variables se pueden instanciar en un skope más arriba (en la descriopción) para ser accesobles en distintas pruebas. Hay que tener en cuenta que las pruebas se ejecutan de forma secuencial
+		
+		El método beforeEach se ejecuta antes de cada test, lo cual es util para reiniciar el ambiente de pruebas
+		
+			describe('Pruebas del componente CounterApp', () => {
+
+				const defaultValue = 100;
+				let wrapper = shallow(<CounterApp value={defaultValue} />);
+
+				beforeEach(() => {
+					wrapper = shallow(<CounterApp value={defaultValue} />);
+				});
+
+				test('Comprueba que el componente se muestra correctamente', () => {
+					expect(wrapper).toMatchSnapshot();
+				})
+
+				test('Comprueba que el valor por defecto se muestra correctamente', () => {
+					const defaultValueText = wrapper.find('h2').text();
+					expect(defaultValueText).toBe(defaultValue.toString());
+				})
+
+				test('Comprueba que el boton +1 fuciona correctamente', () => {
+					wrapper.find('button').at(0).simulate('click');
+					const defaultValueText = wrapper.find('h2').text();
+					expect(defaultValueText).toBe('101');
+				})
+
+				test('Comprueba que el boton -1 fuciona correctamente', () => {
+					wrapper.find('button').at(2).simulate('click');
+					const defaultValueText = wrapper.find('h2').text();
+					expect(defaultValueText).toBe('99');
+				})
+
+			})

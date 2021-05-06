@@ -661,3 +661,126 @@ Sección 4: Primeros pasos con React
 				})
 
 			})
+	
+	Creando una lista de categorías
+		
+		Para la repetición del código en HTML se debe utilizar una key unica por elemento, tal como en este ejemplo
+		
+		    return (
+				<>
+					<h2>GifExpertApp</h2>
+					<hr />
+					<button onClick={handleAdd}>Agregar</button>
+					<ul>
+						{
+							categories.map(category => { return <li key={category}>{category}</li> })
+						}
+					</ul>
+
+				</>
+			);
+	
+	Componente AddCategory
+	
+		Para evitar que el submit de un formulario haga refresh en el navegador, se debe ejecutar la instrucción e.preventDefault(); desde el evento onSubmit de la etiqueta form
+		
+		const handleSubmit = (e) => {
+			e.preventDefault();
+		}
+
+		return (
+			<form onSubmit={handleSubmit}>
+				<h1>{inputValue}</h1>
+				<input type='text' value={inputValue} onChange={handleInputChange} />
+			</form>
+		)
+		
+	Comunicación entre componentes
+	
+		Hay varias formas de comunicación entre componentes, pero una de las más comunes es mandarle una función a un elemento hijo mediante la instancia de una propiedad, por ejemplo
+		
+		    Componenete padre
+			
+				export const GifExpertApp = () => {
+					const [categories, setCategories] = useState(['spideman', 'ironman', 'thor']);
+
+					return (
+						<>
+							<h2>GifExpertApp</h2>
+							<hr />
+							<AddCategory setCategories={setCategories} />
+							<ul>
+								{
+									categories.map(category => { return <li key={category}>{category}</li> })
+								}
+							</ul>
+
+						</>
+					);
+
+				}
+				
+			Componenete hijo
+			
+				export const AddCategory = ({ setCategories }) => {
+					const [inputValue, setInputValue] = useState('')
+
+					const handleInputChange = (e) => {
+						setInputValue(e.target.value);
+					}
+
+					const handleSubmit = (e) => {
+						e.preventDefault();
+						if (inputValue.trim().length > 2) {
+							setCategories(categories => [...categories, inputValue]);
+						}
+						setInputValue('');
+					}
+
+					return (
+						<form onSubmit={handleSubmit}>
+							<input type='text' value={inputValue} onChange={handleInputChange} />
+						</form>
+					)
+				};
+		
+		Podemos observar que el componente hijo está recibiendo una función como propiedad de setCategories y la está utilizando cambiando de esta forma el estado de una propiedad del componente padre
+		
+	useEffect
+	
+		useEffect es un método de react que nos sirve para ejecutar cierto código solo en la renderización del componente
+			useEffect(() => {
+				getGifs();
+			}, [])
+			
+		Documentación: https://es.reactjs.org/docs/hooks-effect.html
+		
+	Los helpers
+	
+		Los helpers son archivos que nos sirven para organizar métodos que no son propios de un componente, se guardan en una carpeta llamada helpers
+		
+	Los custom hooks
+		
+		Son logica que puede ser reutilizada en distintos escenarios, normalmente se almacenan en una carpeta llamada hooks
+		
+		Su estructura es la misma que la de un componente, simplemente es una función 
+		
+			import { useState } from "react"
+
+			export const useFetchGifs = () => {
+
+				const [state, setstate] = useState({
+					data: [],
+					loading: true
+				})
+
+				setTimeout(() => {
+					setstate({
+						data: [1, 2, 3, 4],
+						loading: false
+					})
+				}, 3000);
+
+				return state
+			}
+		
